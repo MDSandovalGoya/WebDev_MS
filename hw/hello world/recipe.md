@@ -1,4 +1,4 @@
-[image of fried fish](fried-fish.jpg)
+[image of fried fish](Fried-fish.jpg)
 
 # Fried Fish
 ## how to make fried fish
