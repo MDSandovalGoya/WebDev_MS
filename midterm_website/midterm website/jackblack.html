@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <style>
+        .site-header{
+            background-color: lightgray;
+            padding: 1rem 0;
+            text-align: center;
+            width: 100%;
+        }
+        .this-page{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+        .nav {
+            display: flex;
+            justify-content:left;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        a {
+            color: black;
+            text-decoration: none;
+            display: inline-block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 0.5rem;
+        }
+        a:hover {
+            color: darkgrey;
+        }
+        .nav a {
+            font-size: 1.6rem;
+            transition: color 0.3s;
+        } 
+        body {
+            background-color: #f1f1f1;
+            background-image: url(face.jpeg);
+            background-position: center center; 
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 200vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .game-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #8EC3E6;
+            border-radius: 10px;
+            color: white;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #598BAF;
+            border: none;
+            border-radius: 5px;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: lightslategray;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .cards {
+            margin-top: 20px;
+        }
+        #game-result {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="site-header">
+        <h1>Blackjack Game</h1>
+        <nav class="nav">
+            <a href="bruh.html">Home</a>
+            <a href="project.html">Projects</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <div class="game-container">
+            <h1>Blackjack Game</h1>
+            <p>Time to play! Click below to start a new game!</p>
+            <button id="start-btn" class="btn">Start Game</button>
+            <div id="game" style="display: none;">
+                <div id="player-cards"></div>
+                <div id="dealer-cards"></div>
+                <p>Your total: <span id="player-total"></span></p>
+                <p>Dealer's total: <span id="dealer-total"></span></p>
+                <button id="hit-btn" class="btn">Hit</button>
+                <button id="stand-btn" class="btn">Stand</button>
+                <p id="game-result"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        let playerTotal = 0;
+        let dealerTotal = 0;
+        let playerCards = [];
+        let dealerCards = [];
+        let gameStarted = false;
+        function getCard() {
+            return Math.floor(Math.random() * 10) + 1;
+        }
+        function updateTotals() {
+            document.getElementById("player-total").textContent = playerTotal;
+            document.getElementById("dealer-total").textContent = dealerTotal;
+        }
+        function updateCards() {
+            document.getElementById("player-cards").innerHTML = `Your cards: ${playerCards.join(", ")}`;
+            document.getElementById("dealer-cards").innerHTML = `Dealer's cards: ${dealerCards.join(", ")}`;
+        }
+        function checkResult() {
+            if (playerTotal > 21) {
+                document.getElementById("game-result").textContent = "You busted! Dealer wins!";
+                endGame();
+            } else if (dealerTotal > 21) {
+                document.getElementById("game-result").textContent = "Dealer busted! You win!";
+                endGame();
+            } else if (playerTotal === 21) {
+                document.getElementById("game-result").textContent = "You got Blackjack! You win!";
+                endGame();
+            } else if (dealerTotal === 21) {
+                document.getElementById("game-result").textContent = "Dealer got Blackjack! Dealer wins!";
+                endGame();
+            }
+        }
+        function endGame() {
+            document.getElementById("hit-btn").disabled = true;
+            document.getElementById("hit-btn").style.display = "none"
+            document.getElementById("stand-btn").disabled = true;
+            document.getElementById("stand-btn").style.display = "none"
+            document.getElementById("start-btn").style.display = "block";
+        }
+        function resetGame() {
+            playerTotal = 0;
+            dealerTotal = 0;
+            playerCards = [];
+            dealerCards = [];
+            document.getElementById("game-result").textContent = "";
+            document.getElementById("player-cards").textContent = "";
+            document.getElementById("dealer-cards").textContent = "";
+            document.getElementById("player-total").textContent = "0";
+            document.getElementById("dealer-total").textContent = "0";
+            document.getElementById("hit-btn").disabled = false;
+            document.getElementById("stand-btn").disabled = false;
+            document.getElementById("game").style.display = "none";
+            document.getElementById("start-btn").style.display = "block";
+            document.getElementById("hit-btn").style.display = "block"
+            document.getElementById("stand-btn").style.display = "block"
+        }
+        document.getElementById("start-btn").addEventListener("click", function() {
+            resetGame();
+            gameStarted = true;
+            document.getElementById("game").style.display = "block";
+            document.getElementById("start-btn").style.display = "none";
+
+            playerCards.push(getCard(), getCard());
+            dealerCards.push(getCard(), getCard());
+
+            playerTotal = playerCards.reduce((sum, card) => sum + card, 0);
+            dealerTotal = dealerCards.reduce((sum, card) => sum + card, 0);
+
+            updateCards();
+            updateTotals();
+            checkResult();
+        });
+        document.getElementById("hit-btn").addEventListener("click", function() {
+            playerCards.push(getCard());
+            playerTotal = playerCards.reduce((sum, card) => sum + card, 0);
+            updateCards();
+            updateTotals();
+            checkResult();
+        });
+        document.getElementById("stand-btn").addEventListener("click", function() {
+            while (dealerTotal < 17) {
+                dealerCards.push(getCard());
+                dealerTotal = dealerCards.reduce((sum, card) => sum + card, 0);
+                updateCards();
+                updateTotals();
+                checkResult();
+            }
+            if (playerTotal > dealerTotal && playerTotal <= 21) {
+                document.getElementById("game-result").textContent = "You win!";
+            } else if (playerTotal === dealerTotal) {
+                document.getElementById("game-result").textContent = "It's a tie!";
+            } else {
+                document.getElementById("game-result").textContent = "Dealer wins!";
+            }
+            endGame();
+        });
+    </script>
+</body>
+</html>
