@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cool Bouncer</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+    }
+    button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .cool-word {
+      position: absolute;
+      font-weight: bold;
+      user-select: none;
+      white-space: nowrap;
+    }
+  </style>
+  
+<script>
+    const maxCools = 10; 
+    const colors = ["#0ff", "#f0f", "#ff0", "#0f0", "#00f", "#f00", "#ffa500", "#00ffff"];
+  
+    function spawnCool() {
+      const currentCools = document.querySelectorAll('.cool-word');
+      if (currentCools.length >= maxCools) return; 
+  
+      const word = document.createElement("div");
+      word.className = "cool-word";
+      word.innerText = "cool";
+ 
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      const randomSize = Math.floor(Math.random() * 30) + 20; 
+      word.style.color = randomColor;
+      word.style.fontSize = randomSize + "px";
+  
+      const startX = Math.random() * (window.innerWidth - 100);
+      const startY = Math.random() * (window.innerHeight - 50);
+      word.style.left = startX + "px";
+      word.style.top = startY + "px";
+  
+      document.body.appendChild(word);
+  
+      let x = startX;
+      let y = startY;
+      let dx = (Math.random() * 3 + 1) * (Math.random() < 0.5 ? -1 : 1);
+      let dy = (Math.random() * 3 + 1) * (Math.random() < 0.5 ? -1 : 1);
+  
+      function move() {
+        x += dx;
+        y += dy;
+  
+        if (x < 0 || x + word.offsetWidth > window.innerWidth) {
+          dx *= -1;
+        }
+        if (y < 0 || y + word.offsetHeight > window.innerHeight) {
+          dy *= -1;
+        }
+  
+        word.style.left = x + "px";
+        word.style.top = y + "px";
+  
+        requestAnimationFrame(move);
+      }
+  
+      move();
+    }
+  </script>
+</head>
+<body>
+
+<button onclick="spawnCool()">Spawn Cool</button>
+
+</body>
+</html>
