@@ -1,0 +1,1 @@
+this is a cool little function I made, basicallt I wanted that bouncing word on the old computers. I know you didn't want me to use tutorials but I had used this after my midterm and I figured it out. Either way I wanted to show it off so I hope you enjoy
